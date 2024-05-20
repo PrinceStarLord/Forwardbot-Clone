@@ -1,11 +1,4 @@
-# Advance Content Saver Bot
-
-Advance Telegram Bot that can work as Message/Files Forwarder from Restricted or Non-Restricted Channels/Groups/Bots. It can save files even if the channel have restrictions of forwarding or else.
-
-## What can this bot do
-- Forward public/private channel messages for private user login needed as forward method
-- Save/clone individual post by its post link
-- Can save multiple post link via `batch` command up to 10K
+# Advance Forward Clone Bot
 
 ## Deployment Methods
 
@@ -66,7 +59,6 @@ AUTH = "1234567" #config("AUTH", default=None)
 ## Commands Available in Bot - [TEAM SPY](https://t.me/dev_gagan)
 
 - ```/start``` - to start the bot
-- ```/batch``` - to download the files in range/bulk by giving one post link and range value
 - ```/cancel``` - to cancel the onging /batch task
 - ```/stats``` - to viewing the statics of bot
 - ```/speedtest``` - can be executed by owner only
@@ -76,7 +68,6 @@ AUTH = "1234567" #config("AUTH", default=None)
 - `restart` - to restart the bot
 - `/resetall` - to reset unlink all other users / bot
 - `/broadcast` - send bulk message to all users who ever have started the bot
-- `/help` - get help about other commands
 
 ## Support
 
