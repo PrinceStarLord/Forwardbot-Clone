@@ -1,21 +1,24 @@
 import asyncio
-import logging 
+import logging
 import logging.config
-from database import db 
-from config import Config  
+import hashlib
+from database import db
+from config import Config
 from pyrogram import Client, __version__
-from pyrogram.raw.all import layer 
+from pyrogram.raw.all import layer
 from pyrogram.enums import ParseMode
-from pyrogram.errors import FloodWait 
+from pyrogram.errors import FloodWait
 
 logging.config.fileConfig('logging.conf')
 logging.getLogger().setLevel(logging.INFO)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 
-class Bot(Client): 
+class Bot(Client):
     def __init__(self):
+        # Hash the long session name to create a short unique identifier
+        session_hash = hashlib.sha256(Config.BOT_SESSION.encode()).hexdigest()[:16]
         super().__init__(
-            Config.BOT_SESSION,
+            session_hash,  # Use the hashed session name
             api_hash=Config.API_HASH,
             api_id=Config.API_ID,
             plugins={
@@ -29,7 +32,7 @@ class Bot(Client):
     async def start(self):
         await super().start()
         me = await self.get_me()
-        logging.info(f"{me.first_name} with for pyrogram v{__version__} (Layer {layer}) started on @{me.username}.")
+        logging.info(f"{me.first_name} with pyrogram v{__version__} (Layer {layer}) started on @{me.username}.")
         self.id = me.id
         self.username = me.username
         self.first_name = me.first_name
@@ -49,14 +52,16 @@ class Bot(Client):
               success += 1
            except Exception:
               failed += 1 
-    #    await self.send_message("venombotsupport", text)
+        # await self.send_message("venombotsupport", text)
         if (success + failed) != 0:
            await db.rmve_frwd(all=True)
-           logging.info(f"Restart message status"
-                 f"success: {success}"
-                 f"failed: {failed}")
+           logging.info(f"Restart message status: success: {success}, failed: {failed}")
 
     async def stop(self, *args):
         msg = f"@{self.username} stopped. Bye."
         await super().stop()
         logging.info(msg)
+
+if __name__ == "__main__":
+    app = Bot()
+    app.run()
